@@ -27,12 +27,14 @@
 import cv2
 import numpy as np
 
-img = cv2.imread('last.png')
+img = cv2.imread('skel0.png')
+cv2.imshow("img",img)
+# gray=img
 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 # edges = cv2.Canny(gray,50,150,apertureSize = 3)
 edges=gray
-minLineLength = 100
-maxLineGap = 1000
+minLineLength = 100000000
+maxLineGap = 0.001
 lines = cv2.HoughLinesP(edges,1,np.pi/10000,10,minLineLength,maxLineGap)
 for line in lines:
     for x1,y1,x2,y2 in line:
