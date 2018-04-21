@@ -65,7 +65,7 @@ w2, h2 = temp_white_circle.shape[::-1]
 # 循环直到游戏失败结束
 for i in range(10000):
     # get_screenshot(0)
-    img_rgb = cv2.imread('5.png', 0)
+    img_rgb = cv2.imread('6.png', 0)
 
     # 如果在游戏截图中匹配到带"再玩一局"字样的模板，则循环中止
     res_end = cv2.matchTemplate(img_rgb, temp_end, cv2.TM_CCOEFF_NORMED)
@@ -102,7 +102,7 @@ for i in range(10000):
         # img_rgb=np.uint8(img_rgb)
         img_rgb = cv2.GaussianBlur(img_rgb, (3, 3), 0)
         # cv2.imwrite('last.png', img_rgb)
-        canny_img = cv2.Canny(img_rgb,200, 500)
+        canny_img = cv2.Canny(img_rgb,100, 200)
         # img_rgb=cv2.floodFill(img_rgb, mask, (w-1,h-1), (255,255,255), (2,2,2),(3,3,3),8)
         H, W = canny_img.shape
 
