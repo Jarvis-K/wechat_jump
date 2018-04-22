@@ -47,13 +47,54 @@ def get_center(img_canny, ):
     x_center, y_center = x_top, (y_top + y_bottom) // 2
     return img_canny, x_center, y_center
 
+def pre_process(img_rgb):
+    img0=img_rgb
+    img_rgb = cv2.GaussianBlur(img_rgb, (3, 3), 0)
+    canny_img = cv2.Canny(img_rgb,100, 200)
+    img = canny_img
+
+    # get four point
+    # gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)  
+    gray=img
+    ret, binary = cv2.threshold(gray,127,255,cv2.THRESH_BINARY)   
+      
+    # _,contours, hierarchy = cv2.findContours(binary,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)  
+    _,contours, hierarchy = cv2.findContours(binary, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)  
+    cv2.drawContours(img,contours,0,(0,0,0),10)  
+    pentagram = contours[0] 
+    leftmost = tuple(pentagram[:,0][pentagram[:,:,0].argmin()])  
+    rightmost = tuple(pentagram[:,0][pentagram[:,:,0].argmax()]) 
+    upmost = tuple(pentagram[:,0][pentagram[:,:,1].argmax()])  
+    downmost = tuple(pentagram[:,0][pentagram[:,:,1].argmin()]) 
+    print(leftmost) 
+    print(rightmost)
+    print(downmost)
+    print(upmost)
+
+    #warp
+    rows, cols = img.shape[:2]
+    # 原图中卡片的四个角点
+    # pts1 = np.float32([list(leftmost),list(downmost),list(upmost),list(rightmost)])
+    pts1 = np.float32([[502, 325],[979, 309],  [520, 1229],[1030, 1219]])
+    # 变换后分别在左上、右上、左下、右下四个点
+    pts2 = np.float32([[0, 0], [480, 0], [0, 900], [480, 900]])
+    # 生成透视变换矩阵
+    M = cv2.getPerspectiveTransform(pts1, pts2)
+    # 进行透视变换
+    dst = cv2.warpPerspective(img, M, (480, 900))
+    dst0 = cv2.warpPerspective(img0, M, (480, 900))
+    # plt.subplot(121), plt.imshow(img[:, :, ::-1]), plt.title('input')
+    # plt.subplot(122), plt.imshow(dst[:, :, ::-1]), plt.title('output')
+    # plt.show()
+    return dst0,dst
+
 
 # 第一次跳跃的距离是固定的
 jump(530)
 time.sleep(1)
 
 # 匹配小跳棋的模板
-temp1 = cv2.imread('temp_player3.png', 0)
+temp1 = cv2.imread('tmp_player.png', 0)
 # temp1 = cv2.imread('tmp_all.png', 0)
 w1, h1 = temp1.shape[::-1]
 # 匹配游戏结束画面的模板
@@ -73,10 +114,12 @@ for i in range(10000):
         print('Game over!')
         break
 
+    img_rgb,canny_img=pre_process(img_rgb)
     # 模板匹配截图中小跳棋的位置
     res1 = cv2.matchTemplate(img_rgb, temp1, cv2.TM_CCOEFF_NORMED)
     min_val1, max_val1, min_loc1, max_loc1 = cv2.minMaxLoc(res1)
     center1_loc = (max_loc1[0] + 39, max_loc1[1] + 189)
+    print(center1_loc)
 
     # 先尝试匹配截图中的中心原点，
     # 如果匹配值没有达到0.95，则使用边缘检测匹配物块上沿
@@ -88,10 +131,10 @@ for i in range(10000):
         x_center, y_center = max_loc2[0] + w2 // 2, max_loc2[1] + h2 // 2
     else:
         # 边缘检测
-        img_rgb = cv2.GaussianBlur(img_rgb, (3, 3), 0)
+        # img_rgb = cv2.GaussianBlur(img_rgb, (3, 3), 0)
         # cv2.imwrite('last.png', img_rgb)
         # canny_img = cv2.Canny(img_rgb,200, 500)
-        canny_img = cv2.Canny(img_rgb,100, 200)
+        # canny_img = cv2.Canny(img_rgb,100, 200)
         # img_rgb=cv2.floodFill(img_rgb, mask, (w-1,h-1), (255,255,255), (2,2,2),(3,3,3),8)
         H, W = canny_img.shape
         cv2.imwrite("canny.png",canny_img)

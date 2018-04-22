@@ -20,7 +20,7 @@
 # cv2.imwrite('houghlines5.jpg',img)
 import cv2  
   
-img = cv2.imread('6.png')  
+img = cv2.imread('canny.png')  
 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)  
 ret, binary = cv2.threshold(gray,127,255,cv2.THRESH_BINARY)   
   
