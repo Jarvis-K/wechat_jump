@@ -88,30 +88,17 @@ for i in range(10000):
         x_center, y_center = max_loc2[0] + w2 // 2, max_loc2[1] + h2 // 2
     else:
         # 边缘检测
-        # h, w = img_rgb.shape[:2]   
-        # mask = np.zeros((h+2, w+2), np.uint8)
-
-        # cv2.floodFill(img_rgb, mask, (w-1,h-1), (255,255,255), (2,2,2),(3,3,3),8)
-        # gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-        # img_rgb = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 2)
-
-
-        # mean = np.uint8(np.mean(img_rgb))
-        # img_rgb = img_rgb - mean
-        # img_rgb=img_rgb+ mean*100
-        # img_rgb=np.uint8(img_rgb)
         img_rgb = cv2.GaussianBlur(img_rgb, (3, 3), 0)
         # cv2.imwrite('last.png', img_rgb)
+        # canny_img = cv2.Canny(img_rgb,200, 500)
         canny_img = cv2.Canny(img_rgb,100, 200)
         # img_rgb=cv2.floodFill(img_rgb, mask, (w-1,h-1), (255,255,255), (2,2,2),(3,3,3),8)
         H, W = canny_img.shape
-
+        cv2.imwrite("canny.png",canny_img)
         # 消去小跳棋轮廓对边缘检测结果的干扰
         for k in range(max_loc1[1] - 10, max_loc1[1] + 189):
             for b in range(max_loc1[0] - 10, max_loc1[0] + 100):
                 canny_img[k][b] = 0
-
-        print(canny_img)
         img_rgb, x_center, y_center = get_center(canny_img)
 
     # 将图片输出以供调试
