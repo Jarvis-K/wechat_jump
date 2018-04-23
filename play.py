@@ -115,11 +115,18 @@ for i in range(10000):
         break
 
     img_rgb,canny_img=pre_process(img_rgb)
+    cv2.imshow("aaa",img_rgb)
     # 模板匹配截图中小跳棋的位置
     res1 = cv2.matchTemplate(img_rgb, temp1, cv2.TM_CCOEFF_NORMED)
     min_val1, max_val1, min_loc1, max_loc1 = cv2.minMaxLoc(res1)
-    center1_loc = (max_loc1[0] + 39, max_loc1[1] + 189)
+    
+
+    left_top = max_loc1  # 左上角
+    right_bottom = (left_top[0] + w1, left_top[1] + h1)  # 右下角
+
+    center1_loc = (int((left_top[0] + right_bottom[0])/2) , int((left_top[1] + right_bottom[1])/2)+int(h1/2))
     print(center1_loc)
+    cv2.rectangle(img_rgb, left_top, right_bottom, 255, 2)
 
     # 先尝试匹配截图中的中心原点，
     # 如果匹配值没有达到0.95，则使用边缘检测匹配物块上沿
@@ -139,8 +146,8 @@ for i in range(10000):
         H, W = canny_img.shape
         cv2.imwrite("canny.png",canny_img)
         # 消去小跳棋轮廓对边缘检测结果的干扰
-        for k in range(max_loc1[1] - 10, max_loc1[1] + 189):
-            for b in range(max_loc1[0] - 10, max_loc1[0] + 100):
+        for k in range(left_top[1] , right_bottom[1]):
+            for b in range(left_top[0], right_bottom[0]):
                 canny_img[k][b] = 0
         img_rgb, x_center, y_center = get_center(canny_img)
 
