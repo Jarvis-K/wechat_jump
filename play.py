@@ -30,6 +30,37 @@ def jump(distance):
     os.system(cmd)
     print(cmd)
 
+def findPoint(pointSet):
+    leftx = 100000
+    rightx = 0
+    topy = 100000
+    bottomy = 0
+    lefty = 100000
+    righty = 0
+    bottomx = 100000
+    topx = 0
+    for point in pointSet:
+        if point[0] < leftx:
+            leftx = point[0]
+        elif point[0] > rightx:
+            rightx = point[0]
+        if point[1] < topy:
+            topy = point[1]
+        elif point[1] > bottomy:
+            bottomy = point[1]
+    for point in pointSet:
+        if point[0] == leftx and point[1] < lefty:
+            lefty = point[1]
+        if point[0] == rightx and point[1] > righty:
+            righty = point[1]
+        if point[1] == bottomy and point[0] < bottomx:
+            bottomx = point[0]
+        if point[1] == topy and point[0] > topx:
+            topx = point[0]
+    # 返回左，右，上，下的坐标
+    return (leftx, lefty), (rightx, righty), (bottomx, bottomy), (topx, topy)
+    # print(left, lefty, right, righty, bottom, bottomx, top, topx)
+
 
 def get_center(img_canny, ):
     # 利用边缘检测的结果寻找物块的上沿和下沿
@@ -62,20 +93,22 @@ def pre_process(img_rgb):
     _,contours, hierarchy = cv2.findContours(binary, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)  
     cv2.drawContours(img,contours,0,(0,0,0),10)  
     pentagram = contours[0] 
-    leftmost = tuple(pentagram[:,0][pentagram[:,:,0].argmin()])  
-    rightmost = tuple(pentagram[:,0][pentagram[:,:,0].argmax()]) 
-    upmost = tuple(pentagram[:,0][pentagram[:,:,1].argmax()])  
-    downmost = tuple(pentagram[:,0][pentagram[:,:,1].argmin()]) 
-    print(leftmost) 
-    print(rightmost)
-    print(downmost)
-    print(upmost)
+    lu,rd,ld,ru=findPoint(pentagram[:,0])
+    print(lu,ru,ld,rd)
+    # leftmost = tuple(pentagram[:,0][pentagram[:,:,0].argmin()])  
+    # rightmost = tuple(pentagram[:,0][pentagram[:,:,0].argmax()]) 
+    # upmost = tuple(pentagram[:,0][pentagram[:,:,1].argmax()])  
+    # downmost = tuple(pentagram[:,0][pentagram[:,:,1].argmin()]) 
+    # print(leftmost) 
+    # print(rightmost)
+    # print(downmost)
+    # print(upmost)
 
     #warp
     rows, cols = img.shape[:2]
     # 原图中卡片的四个角点
     # pts1 = np.float32([list(leftmost),list(downmost),list(upmost),list(rightmost)])
-    pts1 = np.float32([[502, 325],[979, 309],  [520, 1229],[1030, 1219]])
+    pts1 = np.float32([lu,ru, ld, rd])
     # 变换后分别在左上、右上、左下、右下四个点
     pts2 = np.float32([[0, 0], [480, 0], [0, 900], [480, 900]])
     # 生成透视变换矩阵
