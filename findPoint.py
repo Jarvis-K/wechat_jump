@@ -28,16 +28,3 @@ def findPoint(pointSet):
     # 返回左，右，上，下的坐标
     return (leftx, lefty), (rightx, righty), (bottomx, bottomy), (topx, topy)
     # print(left, lefty, right, righty, bottom, bottomx, top, topx)
-
-
-# testList = []
-# for i in range(10):
-#     for j in range(10):
-#         if i == 0 or i == 9 or j == 0 or j == 9:
-#             testList.append([i, j])
-#
-# # testList.append([11, 11])
-# # testList.append([12, 9])
-# #
-# # a1, a2, a3, a4 = findPoint(testList)
-# # print(a1, a2, a3, a4)
