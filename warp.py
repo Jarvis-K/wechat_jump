@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-img = cv2.imread('last.png')
+img = cv2.imread('7.png')
 rows, cols = img.shape[:2]
 # 原图中卡片的四个角点
 pts1 = np.float32([[502, 325],[979, 309],  [520, 1229],[1030, 1219]])

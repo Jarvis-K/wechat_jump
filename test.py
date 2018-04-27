@@ -20,13 +20,23 @@
 # cv2.imwrite('houghlines5.jpg',img)
 import cv2  
   
-img = cv2.imread('canny.png')  
-gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)  
-ret, binary = cv2.threshold(gray,127,255,cv2.THRESH_BINARY)   
-  
+img = cv2.imread('11.png')  
+img_rgb = cv2.GaussianBlur(img, (3, 3), 0)
+canny_img = cv2.Canny(img_rgb,100, 300)
+img = canny_img
+
+gray=img
+# gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)  
+ret, binary = cv2.threshold(img,127,255,cv2.THRESH_BINARY)   
+
+
+# cv2.imshow("aaa",gray)
 # _,contours, hierarchy = cv2.findContours(binary,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)  
-_,contours, hierarchy = cv2.findContours(binary, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)  
-cv2.drawContours(img,contours,0,(255,255,255),10)  
+_,contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)  
+cv2.drawContours(img,contours,0,(177,100,188),20)  
+cv2.imwrite("test.png",img)
+
+# cv2.waitKey(0)
   
 
 

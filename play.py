@@ -3,6 +3,7 @@ import os
 import cv2
 import numpy as np
 import time
+import pylab as pl
 import random
 
 
@@ -29,6 +30,7 @@ def jump(distance):
           % (320 + rand, 410 + rand, 320 + rand, 410 + rand)
     os.system(cmd)
     print(cmd)
+    # os.remove("last.png")
 
 def findPoint(pointSet):
     leftx = 100000
@@ -78,48 +80,55 @@ def get_center(img_canny, ):
     x_center, y_center = x_top, (y_top + y_bottom) // 2
     return img_canny, x_center, y_center
 
-def pre_process(img_rgb):
+
+def getScreen(img_rgb):
     img0=img_rgb
     img_rgb = cv2.GaussianBlur(img_rgb, (3, 3), 0)
-    canny_img = cv2.Canny(img_rgb,100, 200)
-    img = canny_img
-
-    # get four point
-    # gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)  
-    gray=img
-    ret, binary = cv2.threshold(gray,127,255,cv2.THRESH_BINARY)   
-      
-    # _,contours, hierarchy = cv2.findContours(binary,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)  
-    _,contours, hierarchy = cv2.findContours(binary, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)  
-    cv2.drawContours(img,contours,0,(0,0,0),10)  
-    pentagram = contours[0] 
+    canny_img = cv2.Canny(img_rgb,100, 410)
+    img_rgb=canny_img
+    # gray_lap = cv2.Laplacian(img_rgb,cv2.CV_32F,ksize = 3)  
+    # img_rgb = cv2.convertScaleAbs(gray_lap)  
+    img_rgb = cv2.GaussianBlur(img_rgb, (5, 5), 0)
+    gray=img_rgb
+    # img=gray
+    ret, binary = cv2.threshold(gray,0,255,cv2.THRESH_BINARY)   
+    _,contours0, hierarchy = cv2.findContours(binary, cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)  
+    size_rectangle_max = 0; 
+    maxi=0
+    for i in range(len(contours0)):
+        #aproximate countours to polygons
+        approximation = cv2.approxPolyDP(contours0[i], 20, True)
+        size_rectangle = cv2.contourArea(approximation)
+        #store the biggest
+        if size_rectangle> size_rectangle_max:
+            size_rectangle_max = size_rectangle 
+            big_rectangle = approximation
+            maxi=i
+    cv2.drawContours(canny_img,contours0,maxi,(0,0,0),10)  
+    for con in contours0[maxi][:,0]:
+        cv2.circle(img0,tuple(con),10,255,-1)
+    _=pl.imshow(img0,cmap=pl.gray())
+    pl.show()
+    pentagram = contours0[maxi] 
     lu,rd,ld,ru=findPoint(pentagram[:,0])
     print(lu,ru,ld,rd)
-    # leftmost = tuple(pentagram[:,0][pentagram[:,:,0].argmin()])  
-    # rightmost = tuple(pentagram[:,0][pentagram[:,:,0].argmax()]) 
-    # upmost = tuple(pentagram[:,0][pentagram[:,:,1].argmax()])  
-    # downmost = tuple(pentagram[:,0][pentagram[:,:,1].argmin()]) 
-    # print(leftmost) 
-    # print(rightmost)
-    # print(downmost)
-    # print(upmost)
-
     #warp
-    rows, cols = img.shape[:2]
     # 原图中卡片的四个角点
-    # pts1 = np.float32([list(leftmost),list(downmost),list(upmost),list(rightmost)])
     pts1 = np.float32([lu,ru, ld, rd])
     # 变换后分别在左上、右上、左下、右下四个点
-    pts2 = np.float32([[0, 0], [480, 0], [0, 900], [480, 900]])
+    pts2 = np.float32([[0, 0], [750, 0], [0, 1334], [750, 1334]])
     # 生成透视变换矩阵
     M = cv2.getPerspectiveTransform(pts1, pts2)
     # 进行透视变换
-    dst = cv2.warpPerspective(img, M, (480, 900))
-    dst0 = cv2.warpPerspective(img0, M, (480, 900))
+    dst = cv2.warpPerspective(canny_img, M, (750, 1334))
+    dst0 = cv2.warpPerspective(img0, M, (750,1334))
     # plt.subplot(121), plt.imshow(img[:, :, ::-1]), plt.title('input')
     # plt.subplot(122), plt.imshow(dst[:, :, ::-1]), plt.title('output')
     # plt.show()
     return dst0,dst
+
+
+
 
 
 # 第一次跳跃的距离是固定的
@@ -127,7 +136,7 @@ jump(530)
 time.sleep(1)
 
 # 匹配小跳棋的模板
-temp1 = cv2.imread('tmp_player.png', 0)
+temp1 = cv2.imread('temp_player3.png', 0)
 # temp1 = cv2.imread('tmp_all.png', 0)
 w1, h1 = temp1.shape[::-1]
 # 匹配游戏结束画面的模板
@@ -139,7 +148,7 @@ w2, h2 = temp_white_circle.shape[::-1]
 # 循环直到游戏失败结束
 for i in range(10000):
     # get_screenshot(0)
-    img_rgb = cv2.imread('6.png', 0)
+    img_rgb = cv2.imread('10.png', 0)
 
     # 如果在游戏截图中匹配到带"再玩一局"字样的模板，则循环中止
     res_end = cv2.matchTemplate(img_rgb, temp_end, cv2.TM_CCOEFF_NORMED)
@@ -147,9 +156,10 @@ for i in range(10000):
         print('Game over!')
         break
 
-    img_rgb,canny_img=pre_process(img_rgb)
-    cv2.imshow("aaa",img_rgb)
+    img_rgb,canny_img=getScreen(img_rgb)
+    cv2.imwrite("pre.png",img_rgb)
     # 模板匹配截图中小跳棋的位置
+    # canny_img=pre_process(canny_img)
     res1 = cv2.matchTemplate(img_rgb, temp1, cv2.TM_CCOEFF_NORMED)
     min_val1, max_val1, min_loc1, max_loc1 = cv2.minMaxLoc(res1)
     
@@ -171,11 +181,6 @@ for i in range(10000):
         x_center, y_center = max_loc2[0] + w2 // 2, max_loc2[1] + h2 // 2
     else:
         # 边缘检测
-        # img_rgb = cv2.GaussianBlur(img_rgb, (3, 3), 0)
-        # cv2.imwrite('last.png', img_rgb)
-        # canny_img = cv2.Canny(img_rgb,200, 500)
-        # canny_img = cv2.Canny(img_rgb,100, 200)
-        # img_rgb=cv2.floodFill(img_rgb, mask, (w-1,h-1), (255,255,255), (2,2,2),(3,3,3),8)
         H, W = canny_img.shape
         cv2.imwrite("canny.png",canny_img)
         # 消去小跳棋轮廓对边缘检测结果的干扰
