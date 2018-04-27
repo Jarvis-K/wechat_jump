@@ -13,7 +13,7 @@
 7. 通过透视变换转成一个750x1334分辨率的屏幕
 
 原图
-<img src="https://github.com/Jarvis-K/wechat_jump/blob/master/10.png" width = 50% height=50% alt="原图" align=center />
+<img src="https://github.com/Jarvis-K/wechat_jump/blob/master/canny.png" width = 50% height=50% alt="origin" align=center />
 
 处理后
 <img src="https://github.com/Jarvis-K/wechat_jump/blob/master/canny.png" width = 50% height=50% alt="canny" align=center />
@@ -25,7 +25,7 @@
 2. 先删除棋子的边缘值，然后通过寻找400以后的第一个非0像素点p，其所在行非0点的行号取均值即为center\_x，y\_top=p.y，从p往下，直至遇到一个另一个非0点，认为其是y\_bottom，因而center\_y= (y\_top+y\_bottom)/2
 
 结果
-<img src="https://github.com/Jarvis-K/wechat_jump/blob/master/last.png" width = 50% height=50% alt="canny" align=center />
+<img src="https://github.com/Jarvis-K/wechat_jump/blob/master/canny.png" width = 50% height=50% alt="result" align=center />
 ## 计算目标时间
 直接计算欧式距离，再乘以一与手机相关的参数，即可得到时间
 
