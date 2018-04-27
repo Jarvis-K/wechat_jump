@@ -12,6 +12,11 @@
 6. 再通过寻找轮廓点的左上，左下，左下，右下四个点，找到矩形端点，
 7. 通过透视变换转成一个750x1334分辨率的屏幕
 
+原图
+<img src="10.png" width = 50% height=50% alt="原图" align=center />
+
+处理后
+<img src="canny.png" width = 50% height=50% alt="canny" align=center />
 
 ## 识别棋子
 通过屏幕的灰度图，直接进行模版匹配即可
@@ -19,6 +24,8 @@
 1. 先通过模版匹配小白点，有的话，则认为是目标点，
 2. 先删除棋子的边缘值，然后通过寻找400以后的第一个非0像素点p，其所在行非0点的行号取均值即为center\_x，y\_top=p.y，从p往下，直至遇到一个另一个非0点，认为其是y\_bottom，因而center\_y= (y\_top+y\_bottom)/2
 
+结果
+<img src="last.png" width = 50% height=50% alt="canny" align=center />
 ## 计算目标时间
 直接计算欧式距离，再乘以一与手机相关的参数，即可得到时间
 

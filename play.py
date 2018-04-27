@@ -105,10 +105,11 @@ def getScreen(img_rgb):
             big_rectangle = approximation
             maxi=i
     cv2.drawContours(canny_img,contours0,maxi,(0,0,0),10)  
-    for con in contours0[maxi][:,0]:
-        cv2.circle(img0,tuple(con),10,255,-1)
-    _=pl.imshow(img0,cmap=pl.gray())
-    pl.show()
+    # for con in contours0[maxi][:,0]:
+    #     cv2.circle(img0,tuple(con),10,255,-1)
+    # _=pl.imshow(img0,cmap=pl.gray())
+    # pl.show()
+
     pentagram = contours0[maxi] 
     lu,rd,ld,ru=findPoint(pentagram[:,0])
     print(lu,ru,ld,rd)
