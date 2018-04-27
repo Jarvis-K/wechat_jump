@@ -1,7 +1,7 @@
 #coding:utf-8
 import cv2
 import pylab as pl
-img_rgb=cv2.imread("9.png",0)
+img_rgb=cv2.imread("aaa.png",0)
 img0=img_rgb
 img_rgb = cv2.GaussianBlur(img_rgb, (3, 3), 0)
 canny_img = cv2.Canny(img_rgb,100, 210)

@@ -80,11 +80,34 @@ def get_center(img_canny, ):
     x_center, y_center = x_top, (y_top + y_bottom) // 2
     return img_canny, x_center, y_center
 
+def find4point(points):
+    lt = None
+    rt = None
+    lb= None
+    rb = None
+
+    # points = points[np.argsort(points[:][0])]
+    points = points[points[:, 0].argsort()]
+
+    print(points)
+    if points[0][1] > points[1][1]:
+        lt = points[1]
+        lb = points[0]
+    else:
+        lt = points[0]
+        lb = points[1]
+    if points[2][1] > points[3][1]:
+        rt = points[3]
+        rb = points[2]
+    else:
+        rt = points[2]
+        rb = points[3]
+    return ((lt[0], lt[1]), (lb[0], lb[1]), (rt[0], rt[1]), (rb[0], rb[1]))
 
 def getScreen(img_rgb):
     img0=img_rgb
     img_rgb = cv2.GaussianBlur(img_rgb, (3, 3), 0)
-    canny_img = cv2.Canny(img_rgb,100, 410)
+    canny_img = cv2.Canny(img_rgb,100, 210)
     img_rgb=canny_img
     # gray_lap = cv2.Laplacian(img_rgb,cv2.CV_32F,ksize = 3)  
     # img_rgb = cv2.convertScaleAbs(gray_lap)  
@@ -104,14 +127,29 @@ def getScreen(img_rgb):
             size_rectangle_max = size_rectangle 
             big_rectangle = approximation
             maxi=i
-    cv2.drawContours(canny_img,contours0,maxi,(0,0,0),10)  
+    cv2.drawContours(canny_img,contours0,maxi,(0,0,0),20)  
     # for con in contours0[maxi][:,0]:
     #     cv2.circle(img0,tuple(con),10,255,-1)
-    # _=pl.imshow(img0,cmap=pl.gray())
+    # _=pl.imshow(img0)
     # pl.show()
 
-    pentagram = contours0[maxi] 
-    lu,rd,ld,ru=findPoint(pentagram[:,0])
+    pentagram = contours0[maxi]
+    cnt=pentagram
+    rect = cv2.minAreaRect(cnt)  # 最小外接矩形
+    box = np.int0(cv2.boxPoints(rect))  # 矩形的四个角点取整
+    print(box)
+    cv2.drawContours((img0), [box], 0, (255, 0, 0), 2)
+    _=pl.imshow(img0)
+    pl.show()
+
+    # print(type(pentagram[:,0]) 
+    # print(type(big_rectangle))
+    lu,ld,ru,rd=find4point(box)
+    # lu=(box[0][0],box[0][1])
+    # ld=(box[1][0],box[1][1])
+    # rd=(box[2][0],box[2][1])
+    # ru=(box[3][0],box[3][1])
+    # lu,rd,ld,ru=findPoint(pentagram[:,0])
     print(lu,ru,ld,rd)
     #warp
     # 原图中卡片的四个角点
@@ -150,7 +188,7 @@ w2, h2 = temp_white_circle.shape[::-1]
 for i in range(10000):
     # get_screenshot(0)
     img_rgb = cv2.imread('10.png', 0)
-
+    # img_rgb=np.rot90(img_rgb)
     # 如果在游戏截图中匹配到带"再玩一局"字样的模板，则循环中止
     res_end = cv2.matchTemplate(img_rgb, temp_end, cv2.TM_CCOEFF_NORMED)
     if cv2.minMaxLoc(res_end)[1] > 0.95:
