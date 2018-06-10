@@ -20,7 +20,6 @@ CON_STR = {
 api = dType.load()
 
 
-# postion=[41.6034,-253.5679,-24.2, -82.4831]
 postion=[237.7514,49.2358,-25.7501, 7.1569]
 def init():
     # dType.SetHOMEParams(api,postion[0],postion[1],postion[2],postion[3], isQueued=1)
@@ -34,15 +33,11 @@ def init():
     # dType.SetHOMECmd(api, temp=0, isQueued=1)
 
 def init1():
-    # dType.SetHOMEParams(api,postion[0],postion[1],postion[2],postion[3], isQueued=1)
     speed1=100
     speed = 500
     coordinate=9000
     dType.SetPTPJointParams(api, speed1,speed1,speed1,speed1,speed1,speed1,speed1,speed1, isQueued=1)
-    # dType.SetPTPCommonParams(api, speed, speed, isQueued=1)
     dType.SetPTPCoordinateParams(api,coordinate,coordinate,coordinate,coordinate,isQueued=1)
-    # Async Home
-    # dType.SetHOMECmd(api, temp=0, isQueued=1)
 
 def work(press_time):
     print("worktime",press_time)
@@ -50,22 +45,7 @@ def work(press_time):
     dType.SetQueuedCmdClear(api)
     init()
 
-    # Async PTP Motion
-    # print("ggggg")
-    # waitTime=0.721
-    # for i in range(0, 10):
-    #     if i % 2 == 0:
-    #         offset = 0
-    #     else:
-    #         offset = 20
-    #     # time.sleep(2)
-    #     print("i",i)
-    #     lastIndex = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,postion[0],postion[1],postion[2]-offset,postion[3], isQueued=1)[0]  # 移动
-    #     # dType.SetWAITCmd(api, waitTime, isQueued=1)
-    # print("hhhh")
-
     waitTime=press_time*0.001
-    # waitTime=waitTime1
     offset=0;offset1=0
     for i in range(0, 5):
         print(i)
@@ -84,7 +64,6 @@ def work(press_time):
         dType.SetWAITCmd(api, waitTime)
         dType.SetQueuedCmdStartExec(api)
 
-    # dType.SetQueuedCmdStartExec(api)
 def work1(press_time):
     i=0
     print("worktime",press_time)
@@ -150,23 +129,10 @@ def moveBack():
     dType.SetQueuedCmdStopExec(api)
     dType.SetQueuedCmdClear(api)
 
-# 使用的Python库及对应版本：
-# python 3.6
-# opencv-python 3.3.0
-# numpy 1.13.3
-# 用到了opencv库中的模板匹配和边缘检测功能
-
-
-# def get_screenshot(id):
-#     os.system('adb shell screencap -p /sdcard/%s.png' % str(id))
-#     os.system('adb pull /sdcard/%s.png .' % str(id))
 
 
 def jump(distance):
     # 这个参数还需要针对屏幕分辨率进行优化
-    # coffine=1.392
-    # coffine=1.8
-    # coffine = 1.5
     coffine=1.19
     press_time = int(distance * coffine)
     print(distance)
@@ -181,39 +147,6 @@ def jump(distance):
     print("press_time: ",press_time)
     return press_time
     # os.remove("last.png")
-
-
-def findPoint(pointSet):
-    leftx = 100000
-    rightx = 0
-    topy = 100000
-    bottomy = 0
-    lefty = 100000
-    righty = 0
-    bottomx = 100000
-    topx = 0
-    for point in pointSet:
-        if point[0] < leftx:
-            leftx = point[0]
-        elif point[0] > rightx:
-            rightx = point[0]
-        if point[1] < topy:
-            topy = point[1]
-        elif point[1] > bottomy:
-            bottomy = point[1]
-    for point in pointSet:
-        if point[0] == leftx and point[1] < lefty:
-            lefty = point[1]
-        if point[0] == rightx and point[1] > righty:
-            righty = point[1]
-        if point[1] == bottomy and point[0] < bottomx:
-            bottomx = point[0]
-        if point[1] == topy and point[0] > topx:
-            topx = point[0]
-    # 返回左，右，上，下的坐标
-    return (leftx, lefty), (rightx, righty), (bottomx, bottomy), (topx, topy)
-    # print(left, lefty, right, righty, bottom, bottomx, top, topx)
-
 
 
 def get_center(img_canny, ):
@@ -239,8 +172,7 @@ def get_center(img_canny, ):
         if flag  and x0_list[-1]-x0_list[0]-maxl>150:
 
             print("-1   len(x0_list[0]) :", len(x0_list), "x0_list: ", x0_list)
-            # if maxl1-maxl<20:
-            #     maxl1 = x0_list[-1] - x0_list[0]
+           
             cnt0+=1
 
             if cnt0>20 :
@@ -337,17 +269,7 @@ def getScreen(img_rgb):
     box = np.int0(cv2.boxPoints(rect))  # 矩形的四个角点取整
     print(box)
     cv2.drawContours((img0), [box], 0, (255, 0, 0), 2)
-    #_=pl.imshow(img0)
-    #pl.show()
-
-    # print(type(pentagram[:,0])
-    # print(type(big_rectangle))
     lu,ld,ru,rd=find4point(box)
-    # lu=(box[0][0],box[0][1])
-    # ld=(box[1][0],box[1][1])
-    # rd=(box[2][0],box[2][1])
-    # ru=(box[3][0],box[3][1])
-    # lu,rd,ld,ru=findPoint(pentagram[:,0])
     print(lu,ru,ld,rd)
     #warp
     # 原图中卡片的四个角点
@@ -367,255 +289,111 @@ def getScreen(img_rgb):
     # plt.show()
     return dst0,dst
 
-def rotate(img,degree):
-    height, width = img.shape[:2]
-    # 旋转后的尺寸
-
-    heightNew = int(width * fabs(sin(radians(degree))) + height * fabs(cos(radians(degree))))
-    widthNew = int(height * fabs(sin(radians(degree))) + width * fabs(cos(radians(degree))))
-
-    matRotation = cv2.getRotationMatrix2D((width / 2, height / 2), degree, 1)
-
-    matRotation[0, 2] += (widthNew - width) / 2  # 重点在这步，目前不懂为什么加这步
-    matRotation[1, 2] += (heightNew - height) / 2  # 重点在这步
-
-    imgRotation = cv2.warpAffine(img, matRotation, (widthNew, heightNew), borderValue=(255, 255, 255))
-    return imgRotation
 
 class wechatJump(QtCore.QObject):
-    """docstring for wechatJumo"""
+    """wechatJump Logic and Motion Part"""
     runSig = QtCore.pyqtSignal()
     runFlag= True
     def runSigCall(self):
+        """accept signal from AllForOne to stop jump"""
         self.runFlag = False
     def main(self,w_length,h_length,sig):
+        
         self.runFlag=True
         self.runSig.connect(self.runSigCall)
         state = dType.ConnectDobot(api, "", 115200)[0]
-    print("Connect status:", CON_STR[state])
 
-    # 第一次跳跃的距离是固定的
-    # jump(530)
-    # time.sleep(1)
+        # 匹配小跳棋的模板
+        temp1 = cv2.imread('temp_player.jpg', 0)
+        w1, h1 = temp1.shape[::-1]
+        # 匹配游戏结束画面的模板
+        temp_end = cv2.imread('temp_end.jpg', 0)
+        # 匹配中心小圆点的模板
+        temp_white_circle = cv2.imread('temp_white_circle.jpg', 0)
+        w2, h2 = temp_white_circle.shape[::-1]
 
-
-    # file=open('dis&time.txt','w')
-    # 匹配小跳棋的模板
-    temp1 = cv2.imread('temp_player.jpg', 0)
-    # temp1 = cv2.imread('tmp_all.png', 0)
-    w1, h1 = temp1.shape[::-1]
-    # 匹配游戏结束画面的模板
-    temp_end = cv2.imread('temp_end.jpg', 0)
-    # 匹配中心小圆点的模板
-    temp_white_circle = cv2.imread('temp_white_circle.jpg', 0)
-    w2, h2 = temp_white_circle.shape[::-1]
-
-    # 循环直到游戏失败结束
-    for i in range(10000):
-        # get_screenshot(0)
-        if not self.runFlag:
+        # 循环直到游戏失败结束
+        for i in range(10000):
+            # get_screenshot(0)
+            if not self.runFlag:
+                    break
+            img_rgb = cv2.imread('phone.png', 0)
+            img_rgb = np.transpose(img_rgb);
+            img_rgb = cv2.flip(img_rgb, 0);
+            # cv2.imwrite("imgs/"+str(i)+"_origin.png",img_rgb)
+            # 如果在游戏截图中匹配到带"再玩一局"字样的模板，则循环中止
+            res_end = cv2.matchTemplate(img_rgb, temp_end, cv2.TM_CCOEFF_NORMED)
+            if cv2.minMaxLoc(res_end)[1] > 0.8:
+                print('Game over!')
                 break
-        img_rgb = cv2.imread('phone.png', 0)
-        img_rgb = np.transpose(img_rgb);
-        img_rgb = cv2.flip(img_rgb, 0);
-
-        # img_rgb=rotate(img_rgb,90)
-
-        # rows, cols = img_rgb.shape
-        # M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)
-        # img_rgb = cv2.warpAffine(img_rgb, M, (rows, cols))
 
 
+            img_rgb, canny_img = getScreen(img_rgb)
+            # cv2.imwrite("pre.png", img_rgb)
+            cv2.imwrite("imgs/"+str(i)+"_pre.png",img_rgb)
+            # 模板匹配截图中小跳棋的位置
+            # canny_img=pre_process(canny_img)
+            res1 = cv2.matchTemplate(img_rgb, temp1, cv2.TM_CCOEFF_NORMED)
+            min_val1, max_val1, min_loc1, max_loc1 = cv2.minMaxLoc(res1)
+            print(max_val1)
+            if(max_val1<0.5):
+                continue
+            if state == dType.DobotConnect.DobotConnect_NoError:
+                print("ccc")
+                moveForward()
+                print("ddd")
 
-        # cv2.imwrite("imgs/"+str(i)+"_origin.png",img_rgb)
-        # 如果在游戏截图中匹配到带"再玩一局"字样的模板，则循环中止
-        res_end = cv2.matchTemplate(img_rgb, temp_end, cv2.TM_CCOEFF_NORMED)
-        if cv2.minMaxLoc(res_end)[1] > 0.8:
-            print('Game over!')
-            break
+            left_top = max_loc1  # 左上角
+            right_bottom = (left_top[0] + w1, left_top[1] + h1)  # 右下角
 
+            center1_loc = (int((left_top[0] + right_bottom[0]) / 2), int((left_top[1] + right_bottom[1]) / 2) + int(h1 / 2))
+            print(center1_loc)
+            cv2.rectangle(img_rgb, left_top, right_bottom, 255, 2)
 
-        img_rgb, canny_img = getScreen(img_rgb)
-        # cv2.imwrite("pre.png", img_rgb)
-        cv2.imwrite("imgs/"+str(i)+"_pre.png",img_rgb)
-        # 模板匹配截图中小跳棋的位置
-        # canny_img=pre_process(canny_img)
-        res1 = cv2.matchTemplate(img_rgb, temp1, cv2.TM_CCOEFF_NORMED)
-        min_val1, max_val1, min_loc1, max_loc1 = cv2.minMaxLoc(res1)
-        print(max_val1)
-        if(max_val1<0.5):
-            continue
-        if state == dType.DobotConnect.DobotConnect_NoError:
-            print("ccc")
-            moveForward()
-            print("ddd")
+            # 先尝试匹配截图中的中心原点，
+            # 如果匹配值没有达到0.95，则使用边缘检测匹配物块上沿
 
-        left_top = max_loc1  # 左上角
-        right_bottom = (left_top[0] + w1, left_top[1] + h1)  # 右下角
-
-        center1_loc = (int((left_top[0] + right_bottom[0]) / 2), int((left_top[1] + right_bottom[1]) / 2) + int(h1 / 2))
-        print(center1_loc)
-        cv2.rectangle(img_rgb, left_top, right_bottom, 255, 2)
-
-        # 先尝试匹配截图中的中心原点，
-        # 如果匹配值没有达到0.95，则使用边缘检测匹配物块上沿
-
-        res2 = cv2.matchTemplate(img_rgb, temp_white_circle, cv2.TM_CCOEFF_NORMED)
-        min_val2, max_val2, min_loc2, max_loc2 = cv2.minMaxLoc(res2)
-        if max_val2 > 0.91:
-            print('found white circle!')
-            x_center, y_center = max_loc2[0] + w2 // 2, max_loc2[1] + h2 // 2
-        else:
-            # 边缘检测
-            H, W = canny_img.shape
-            # cv2.imwrite("canny.png", canny_img)
-            # 消去小跳棋轮廓对边缘检测结果的干扰
-            for k in range(left_top[1], right_bottom[1]):
-                for b in range(left_top[0], right_bottom[0]):
-                    canny_img[k][b] = 0
-            img_rgb, x_center, y_center = get_center(canny_img)
-
-        # 将图片输出以供调试
-        img_rgb = cv2.circle(img_rgb, (x_center, y_center), 10, 255, -1)
-        img_rgb = cv2.circle(img_rgb, center1_loc, 10, 255, -1)
-        # cv2.rectangle(canny_img, max_loc1, center1_loc, 255, 2)
-        cv2.imwrite('last.png', img_rgb)
-        cv2.imwrite("imgs/"+str(i)+'_last.png',img_rgb)
-        print("last write down")
-
-        distance = (center1_loc[0] - x_center) ** 2 + (center1_loc[1] - y_center) ** 2
-        distance = distance ** 0.5
-        print("distance:", distance)
-        press_time = jump(distance)
-        sig.emit(press_time)
-        # file.writelines(str(distance)+'\t'+str(press_time)+'\n')
-        if state == dType.DobotConnect.DobotConnect_NoError:
-            work1(press_time)
-            time.sleep(1.7)
-            moveBack()
-            time1=0.2
-            time.sleep(time1)
-            divide = 500.0
-            if press_time/divide<time1:
-                time.sleep(time1)
+            res2 = cv2.matchTemplate(img_rgb, temp_white_circle, cv2.TM_CCOEFF_NORMED)
+            min_val2, max_val2, min_loc2, max_loc2 = cv2.minMaxLoc(res2)
+            if max_val2 > 0.91:
+                print('found white circle!')
+                x_center, y_center = max_loc2[0] + w2 // 2, max_loc2[1] + h2 // 2
             else:
-                time.sleep(press_time / divide)
-                print(press_time/divide)
+                # 边缘检测
+                H, W = canny_img.shape
+                # cv2.imwrite("canny.png", canny_img)
+                # 消去小跳棋轮廓对边缘检测结果的干扰
+                for k in range(left_top[1], right_bottom[1]):
+                    for b in range(left_top[0], right_bottom[0]):
+                        canny_img[k][b] = 0
+                img_rgb, x_center, y_center = get_center(canny_img)
 
-    # Disconnect Dobot
-    dType.DisconnectDobot(api)
+            # 将图片输出以供调试
+            img_rgb = cv2.circle(img_rgb, (x_center, y_center), 10, 255, -1)
+            img_rgb = cv2.circle(img_rgb, center1_loc, 10, 255, -1)
+            # cv2.rectangle(canny_img, max_loc1, center1_loc, 255, 2)
+            cv2.imwrite('last.png', img_rgb)
+            cv2.imwrite("imgs/"+str(i)+'_last.png',img_rgb)
+            print("last write down")
 
+            distance = (center1_loc[0] - x_center) ** 2 + (center1_loc[1] - y_center) ** 2
+            distance = distance ** 0.5
+            print("distance:", distance)
+            press_time = jump(distance)
+            sig.emit(press_time)
+            # file.writelines(str(distance)+'\t'+str(press_time)+'\n')
+            if state == dType.DobotConnect.DobotConnect_NoError:
+                work1(press_time)
+                time.sleep(1.7)
+                moveBack()
+                time1=0.2
+                time.sleep(time1)
+                divide = 500.0
+                if press_time/divide<time1:
+                    time.sleep(time1)
+                else:
+                    time.sleep(press_time / divide)
+                    print(press_time/divide)
 
-# if __name__ == '__main__':
-#     # main()
-#     # Connect Dobot
-#     state = dType.ConnectDobot(api, "", 115200)[0]
-#     print("Connect status:", CON_STR[state])
-
-#     # 第一次跳跃的距离是固定的
-#     # jump(530)
-#     # time.sleep(1)
-
-
-#     # file=open('dis&time.txt','w')
-#     # 匹配小跳棋的模板
-#     temp1 = cv2.imread('temp_player.jpg', 0)
-#     # temp1 = cv2.imread('tmp_all.png', 0)
-#     w1, h1 = temp1.shape[::-1]
-#     # 匹配游戏结束画面的模板
-#     temp_end = cv2.imread('temp_end.jpg', 0)
-#     # 匹配中心小圆点的模板
-#     temp_white_circle = cv2.imread('temp_white_circle.jpg', 0)
-#     w2, h2 = temp_white_circle.shape[::-1]
-
-#     # 循环直到游戏失败结束
-#     for i in range(10000):
-#         # get_screenshot(0)
-#         img_rgb = cv2.imread('../phone.png', 0)
-#         img_rgb = np.transpose(img_rgb);
-#         img_rgb = cv2.flip(img_rgb, 0);
-
-#         # img_rgb=rotate(img_rgb,90)
-
-#         # rows, cols = img_rgb.shape
-#         # M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)
-#         # img_rgb = cv2.warpAffine(img_rgb, M, (rows, cols))
-
-
-
-#         # cv2.imwrite("imgs/"+str(i)+"_origin.png",img_rgb)
-#         # 如果在游戏截图中匹配到带"再玩一局"字样的模板，则循环中止
-#         res_end = cv2.matchTemplate(img_rgb, temp_end, cv2.TM_CCOEFF_NORMED)
-#         if cv2.minMaxLoc(res_end)[1] > 0.8:
-#             print('Game over!')
-#             break
-
-
-#         img_rgb, canny_img = getScreen(img_rgb)
-#         # cv2.imwrite("pre.png", img_rgb)
-#         cv2.imwrite("imgs/"+str(i)+"_pre.png",img_rgb)
-#         # 模板匹配截图中小跳棋的位置
-#         # canny_img=pre_process(canny_img)
-#         res1 = cv2.matchTemplate(img_rgb, temp1, cv2.TM_CCOEFF_NORMED)
-#         min_val1, max_val1, min_loc1, max_loc1 = cv2.minMaxLoc(res1)
-#         print(max_val1)
-#         if(max_val1<0.5):
-#             continue
-#         if state == dType.DobotConnect.DobotConnect_NoError:
-#             print("ccc")
-#             moveForward()
-#             print("ddd")
-
-#         left_top = max_loc1  # 左上角
-#         right_bottom = (left_top[0] + w1, left_top[1] + h1)  # 右下角
-
-#         center1_loc = (int((left_top[0] + right_bottom[0]) / 2), int((left_top[1] + right_bottom[1]) / 2) + int(h1 / 2))
-#         print(center1_loc)
-#         cv2.rectangle(img_rgb, left_top, right_bottom, 255, 2)
-
-#         # 先尝试匹配截图中的中心原点，
-#         # 如果匹配值没有达到0.95，则使用边缘检测匹配物块上沿
-
-#         res2 = cv2.matchTemplate(img_rgb, temp_white_circle, cv2.TM_CCOEFF_NORMED)
-#         min_val2, max_val2, min_loc2, max_loc2 = cv2.minMaxLoc(res2)
-#         if max_val2 > 0.91:
-#             print('found white circle!')
-#             x_center, y_center = max_loc2[0] + w2 // 2, max_loc2[1] + h2 // 2
-#         else:
-#             # 边缘检测
-#             H, W = canny_img.shape
-#             # cv2.imwrite("canny.png", canny_img)
-#             # 消去小跳棋轮廓对边缘检测结果的干扰
-#             for k in range(left_top[1], right_bottom[1]):
-#                 for b in range(left_top[0], right_bottom[0]):
-#                     canny_img[k][b] = 0
-#             img_rgb, x_center, y_center = get_center(canny_img)
-
-#         # 将图片输出以供调试
-#         img_rgb = cv2.circle(img_rgb, (x_center, y_center), 10, 255, -1)
-#         img_rgb = cv2.circle(img_rgb, center1_loc, 10, 255, -1)
-#         # cv2.rectangle(canny_img, max_loc1, center1_loc, 255, 2)
-#         # cv2.imwrite('last.png', img_rgb)
-#         cv2.imwrite("imgs/"+str(i)+'_last.png',img_rgb)
-#         print("last write down")
-
-#         distance = (center1_loc[0] - x_center) ** 2 + (center1_loc[1] - y_center) ** 2
-#         distance = distance ** 0.5
-#         print("distance:", distance)
-#         press_time = jump(distance)
-#         # file.writelines(str(distance)+'\t'+str(press_time)+'\n')
-#         if state == dType.DobotConnect.DobotConnect_NoError:
-#             work1(press_time)
-#             time.sleep(1.7)
-#             moveBack()
-#             time1=0.2
-#             time.sleep(time1)
-#             divide = 500.0
-#             if press_time/divide<time1:
-#                 time.sleep(time1)
-#             else:
-#                 time.sleep(press_time / divide)
-#                 print(press_time/divide)
-#     # Disconnect Dobot
-#     dType.DisconnectDobot(api)
-
+        # Disconnect Dobot
+        dType.DisconnectDobot(api)
