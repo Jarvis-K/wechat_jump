@@ -1,3 +1,27 @@
+# HOW TO USE
+## 安装SDK
+1. 安装JAI相机SDK
+2. DOBOT机械臂SDK
+3. `pip3 install PyQt5,opencv`
+
+## 运行相机拍摄程序
+先`cd 1-AsyncImageRecordingSample/bin/Release/`后运行`AsyncImageRecordingSample.exe`开始相机的拍摄，界面使用部分
+
+**WAITFOR CZY**
+
+## 运行识别与操作程序
+`python AllForOne.py`运行程序，界面如下
+<img src="https://github.com/Jarvis-K/wechat_jump/blob/master/doc_imgs/OneForAll.png?raw=true" width = 50% height=50% alt="origin" align=center />
+
+在框中填入手机的分辨率，然后点击`play`开始`stop`停止。
+
+
+# 代码逻辑
+# 相机代码
+***TODO FOR CZY***
+# 识别代码
+# 机械臂代码
+# GUI代码
 # play.py逻辑
 第一次跳跃的距离是固定的，所以我们可以通过这来调节系数。
 
