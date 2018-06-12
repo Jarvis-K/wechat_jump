@@ -9,7 +9,7 @@
 
 ## 运行识别与操作程序
 `python AllForOne.py`运行程序，界面如下
-![](gui.png)
+![](./doc_imgs/gui.png)
 
 在框中填入手机的分辨率，然后点击`play`开始`stop`停止。
 

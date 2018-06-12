@@ -6,7 +6,7 @@
 
 - 运行相机程序，会出现相机程序的gui，如图：
 
-![](camera_gui.JPG)
+![](./doc_imgs/camera_gui.JPG)
 
 - **Recording count**变量的框设置为数值1，因为我们每次只需拍一张图片，用作python程序的输入来处理图片。
 
