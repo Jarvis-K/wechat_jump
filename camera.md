@@ -2,7 +2,17 @@
 ---
 
 ### 相机程序逻辑
-1. 运行相机程序，会出现相机程序的gui，如图：
+
+
+- 运行相机程序，会出现相机程序的gui，如图：
+
+- **Recording count**变量的框设置为数值1，因为我们每次只需拍一张图片，用作python程序的输入
+来处理图片
+
+- 点击**Start**开始拍照，拍照的流程如下：
+    - 判断是否启动相机实例，只有存在实例的情况下进入`while`循环，进行照片的获取、记录和保存
+	- 在`while`循环中，
+	
 
 ```cs
 private void startCaptureButton_Click(object sender, EventArgs e);
