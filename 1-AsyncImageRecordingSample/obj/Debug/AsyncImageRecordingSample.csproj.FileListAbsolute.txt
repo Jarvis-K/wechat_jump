@@ -1,0 +1,28 @@
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\bin\Debug\AsyncImageRecordingSample.exe
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\bin\Debug\AsyncImageRecordingSample.pdb
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\bin\Debug\Jai_FactoryDotNET.dll
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\bin\Debug\log4net.dll
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\bin\Debug\Jai_FactoryDotNET.pdb
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\bin\Debug\Jai_FactoryDotNET.xml
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\bin\Debug\log4net.xml
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\obj\Debug\AsyncImageRecordingSample.csprojResolveAssemblyReference.cache
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\obj\Debug\SimpleImageDisplaySample.Form1.resources
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\obj\Debug\AsyncImageRecordingSample.Properties.Resources.resources
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\obj\Debug\AsyncImageRecordingSample.csproj.GenerateResource.Cache
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\obj\Debug\AsyncImageRecordingSample.csproj.CoreCompileInputs.cache
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\obj\Debug\AsyncImageRecordingSample.exe
+D:\Program Files\JAI\SDK\sample\NET\AsyncImageRecordingSample\obj\Debug\AsyncImageRecordingSample.pdb
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\bin\Debug\AsyncImageRecordingSample.exe
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\bin\Debug\AsyncImageRecordingSample.pdb
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\bin\Debug\Jai_FactoryDotNET.dll
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\bin\Debug\log4net.dll
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\bin\Debug\Jai_FactoryDotNET.pdb
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\bin\Debug\Jai_FactoryDotNET.xml
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\bin\Debug\log4net.xml
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\obj\Debug\AsyncImageRecordingSample.csprojResolveAssemblyReference.cache
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\obj\Debug\SimpleImageDisplaySample.Form1.resources
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\obj\Debug\AsyncImageRecordingSample.Properties.Resources.resources
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\obj\Debug\AsyncImageRecordingSample.csproj.GenerateResource.Cache
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\obj\Debug\AsyncImageRecordingSample.csproj.CoreCompileInputs.cache
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\obj\Debug\AsyncImageRecordingSample.exe
+C:\Users\aida\Desktop\1-AsyncImageRecordingSample\obj\Debug\AsyncImageRecordingSample.pdb
