@@ -5,13 +5,11 @@
 3. `pip3 install PyQt5,opencv`
 
 ## 运行相机拍摄程序
-先`cd 1-AsyncImageRecordingSample/bin/Release/`后运行`AsyncImageRecordingSample.exe`开始相机的拍摄，界面使用部分
-
-**WAITFOR CZY**
+先`cd 1-AsyncImageRecordingSample/bin/Release/`后运行`AsyncImageRecordingSample.exe`开始相机的拍摄，界面使用部分见 [camera.md](https://github.com/Jarvis-K/wechat_jump/blob/master/camera.md)
 
 ## 运行识别与操作程序
 `python AllForOne.py`运行程序，界面如下
-![](OneForAll.png)
+![](gui.png)
 
 在框中填入手机的分辨率，然后点击`play`开始`stop`停止。
 
@@ -88,15 +86,21 @@ if max_val2 > 0.91:
 如果没匹配到白点的话，则我们需要自己找到目标点，先删除棋子的边缘值，由于预处理过程并不能保证很理想，所以在这里我们自己想了个解决方案，我们从400（上面的数字部分跳过）开始，从上往下遍历，设置一个maxl（记录所遇到的行的最左最右点的最大间隔），如果连续三行都小于maxl，则认为maxl即我们需要找的物块行，再取平均，就得到了中心点位置。详细代码见`play.py`的`get_center()`实现。
 
 结果
-![](last.jpg)
+![](last.png)
 
 ## 计算目标时间
 直接计算欧式距离，再乘以一与手机相关的参数，即可得到时间
 
 # 机械臂代码
-*** TODO FOR XHY ***
-# GUI代码
-*** TODO FOR JARVIS***
+
+## 设置dobot关节速度参数
+在这里，根据跳一跳游戏中不同方块之间的距离，对机械臂末端笔头对手机屏幕的下降按压、上升脱离速度进行二段调整：当下一个目标方块平台距现在的距离计算得到的按压时间小于450ms时，设置关节速度`coordinate=9000`；而当按压时间大于450ms时，设置关节速度`coordinate=4000`
+
+## 设置dobot每一次运动参数
+`moveForward()`和`moveBack()`函数分别实现机械臂操作完成前、后的移入和移出手机屏幕范围。
+
+`work1(press_time)`函数接受在计算目标时间部分计算好的按压时间`press_time`，并`init()`设置好移动速度。之后快速下降到精确坐标点进行停留按压。
+
 
 # 结果展示
 
