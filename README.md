@@ -11,14 +11,14 @@
 
 ## 运行识别与操作程序
 `python AllForOne.py`运行程序，界面如下
-<img src="https://github.com/Jarvis-K/wechat_jump/blob/master/doc_imgs/OneForAll.png?raw=true" width = 50% height=50% alt="origin" align=center />
+![](OneForAll.png)
 
 在框中填入手机的分辨率，然后点击`play`开始`stop`停止。
 
 
 # 代码逻辑
 # 相机代码
-***TODO FOR CZY***
+见<camera.md>
 # 识别代码
 ## 载入待识别图片与模版
 载入棋子，结束以及白点的模版：
@@ -58,11 +58,10 @@ img_rgb = cv2.flip(img_rgb, 0);
 7. 通过透视变换转成一个750x1334分辨率的屏幕`cv2.warpPerspective(canny_img, M, (1080, 1920))`
 
 原图
-<img src="https://github.com/Jarvis-K/wechat_jump/blob/master/10.png?raw=true" width = 50% height=50% alt="origin" align=center />
+![](10.png)
 
 处理后
-<img src="https://github.com/Jarvis-K/wechat_jump/blob/master/canny.png?raw=true" width = 50% height=50% alt="canny" align=center />
-
+![](canny.png)
 ## 识别棋子并判断图片有效性
 通过屏幕的灰度图，直接进行模版匹配即可
 
